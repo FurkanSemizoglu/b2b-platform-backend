@@ -6,8 +6,8 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
-    private jwtService: JwtService
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -104,6 +104,40 @@ export class AuthService {
       });
 
       return customer;
+    });
+  }
+
+  async registerAdmin(data: {
+    name: string;
+    surname: string;
+    email: string;
+    password: string;
+    age: number;
+  }) {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    return this.prisma.$transaction(async (prisma) => {
+      const user = await prisma.user.create({
+        data: {
+          name: data.name,
+          surname: data.surname,
+          email: data.email,
+          password: hashedPassword,
+          age: data.age,
+          role: 'ADMIN'
+        }
+      });
+
+      const admin = await prisma.admin.create({
+        data: {
+          userId: user.id
+        },
+        include: {
+          user: true
+        }
+      });
+
+      return admin;
     });
   }
 } 
