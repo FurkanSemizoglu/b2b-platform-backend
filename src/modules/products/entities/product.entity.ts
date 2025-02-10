@@ -1,6 +1,10 @@
-import { Product ,Prisma  ,Category ,Supplier ,Images } from '@prisma/client'; // Prisma Client'tan Product tipini içe aktar
+import { Product, Prisma } from '@prisma/client';
+import { CategoryEntity } from 'src/modules/category/entities/category.entity';
+import { ImageEntity } from 'src/modules/image/entities/image.entity';
+import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 
-export class ProductEntity implements Product { // Product interface'ini uygula
+
+export class ProductEntity implements Product {
   id: string;
   productName: string;
   productDescription: string;
@@ -8,17 +12,17 @@ export class ProductEntity implements Product { // Product interface'ini uygula
   putToMarket: boolean;
   availableForTrade: boolean;
   totalStockQuantity: number;
-  unitPrice: Prisma.Decimal; // Decimal tipini kullan
+  unitPrice: Prisma.Decimal;
   siloStockQuantity: number | null;
   marketStockQuantity: number | null;
   minimumSellingQuantity: number | null;
   discountAvailable: boolean;
   discountRate: number;
-  Images: Images[];
+  images: ImageEntity[] | null; 
   categoryId: string;
-  category: Category;
+  category: CategoryEntity  | null; 
   supplierId: string;
-  supplier: Supplier;
+  supplier: SupplierEntity | null; 
   createdAt: Date;
   updatedAt: Date;
 }
