@@ -34,22 +34,23 @@ model Product {
   supplierId String
   supplier   Supplier @relation(fields: [supplierId], references: [id])
 
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  OrderItem OrderItem[]
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  surname   String
-  email     String   @unique
-  password  String
-  age       Int
-  role      UserRole
-  
-  supplier  Supplier?
-  customer  Customer?
-  admin     Admin?
+  id       String   @id @default(uuid())
+  name     String
+  surname  String
+  email    String   @unique
+  password String
+  age      Int
+  role     UserRole
+
+  supplier Supplier?
+  customer Customer?
+  admin    Admin?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -62,29 +63,31 @@ enum UserRole {
 }
 
 model Supplier {
-  id          String    @id @default(uuid())
+  id          String  @id @default(uuid())
   companyName String
   website     String?
   logo        String?
-  
-  userId      String    @unique
-  user        User      @relation(fields: [userId], references: [id])
-  
-  products    Product[]
-  address     Address?
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  products Product[]
+  address  Address?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Order     Order[]
 }
 
 model Customer {
-  id        String   @id @default(uuid())
-  
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
-  
+  id String @id @default(uuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Order     Order[]
 }
 
 model Address {
@@ -94,20 +97,20 @@ model Address {
   postalCode   String?
   country      String
   detailAdress String
-  supplierId   String  @unique
+  supplierId   String   @unique
   supplier     Supplier @relation(fields: [supplierId], references: [id])
 
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Images {
-  id        String  @id @default(uuid())
+  id        String   @id @default(uuid())
   url       String
   productId String
-  product   Product @relation(fields: [productId], references: [id])
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
@@ -115,15 +118,98 @@ model Category {
   name        String
   description String?
   products    Product[]
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Admin {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  user      User     @relation(fields: [userId], references: [id])
-  
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id               String      @id @default(uuid())
+  orderNumber      String      @unique // Sipariş numarası benzersiz olmalı   orderDate     DateTime @default(now()) // Sipariş tarihi, oluşturulduğu an olsun
+  customerId       String
+  customer         Customer    @relation(fields: [customerId], references: [id])
+  supplier         Supplier    @relation(fields: [supplierId], references: [id])
+  supplierId       String
+  status           StatusType  @default(PENDING) // Sipariş durumu (Bekliyor, Onaylandı, Kargolandı vb.)
+  orderItems       OrderItem[] 
+  shipment         Shipment? // Kargo bilgisi (nullable)
+  paymentDate      DateTime? // Ödeme tarihi (nullable)
+  supplierApproval Boolean? // Tedarikçi onay durumu (nullable)
+  totalCost        Decimal? // Toplam maliyet (nullable)
+  bill             Bill? // Fatura bilgisi (nullable)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
+
+enum StatusType {
+  PENDING
+  FINISHED
+  CANCELLED
+}
+
+/* model Status {
+  id        String   @id @default(uuid())
+  name      String   @unique // Durum adı benzersiz olmalı (örn: Bekliyor, Onaylandı, Kargolandı vb.)
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+} */
+
+model OrderItem {
+  id           String   @id @default(uuid())
+  order        Order    @relation(fields: [orderId], references: [id])
+  orderId      String
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id])
+  quantity     Int
+  discountRate Int      @default(0)
+  unitPrice    Decimal
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Shipment {
+  id             String    @id @default(uuid())
+  orderId        String    @unique
+  order          Order     @relation(fields: [orderId], references: [id])
+  shipmentDate   DateTime?
+  shipperId      String
+  shipper        Shipper   @relation(fields: [shipperId], references: [id])
+  trackingNumber String?
+  shippingPrice  Decimal?
+  status         StatusType @default(PENDING)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Shipper {
+  id           String     @id @default(uuid())
+  componyName  String // Kargo firması adı
+  phone        String? // Telefon numarası (nullable)
+  email        String? // E-posta adresi (nullable)
+  website      String? // Web sitesi (nullable)
+  shipments    Shipment[]
+  ShipmentType String // Burası enum olabilir gemi-kara-hava ilerde düşünülücek.
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Bill {
+  id        String    @id @default(uuid())
+  orderId   String    @unique
+  order     Order     @relation(fields: [orderId], references: [id])
+  billDate  DateTime? // Fatura tarihi (nullable)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  // ... diğer fatura bilgileri (fatura numarası, tutarı vb.)
 }
