@@ -40,17 +40,19 @@ model Product {
 }
 
 model User {
-  id       String   @id @default(uuid())
-  name     String
-  surname  String
-  email    String   @unique
-  password String
-  age      Int
-  role     UserRole
+  id        String   @id @default(uuid())
+  name      String
+  surname   String
+  email     String   @unique
+  password  String
+  age       Int
+  role      UserRole
+  
+  supplier  Supplier?
+  customer  Customer?
+  admin     Admin?
+  refreshTokens RefreshToken[]
 
-  supplier Supplier?
-  customer Customer?
-  admin    Admin?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -212,4 +214,14 @@ model Bill {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   // ... diğer fatura bilgileri (fatura numarası, tutarı vb.)
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
