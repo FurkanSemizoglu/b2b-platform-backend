@@ -18,7 +18,7 @@ export class OrdersService {
         shipment: true,
         bill: true,
         supplier: true,
-        customer: true
+        customer: true,
       },
     });
     return orders.map((order) => this.mapOrderToEntity(order));
@@ -61,7 +61,7 @@ export class OrdersService {
                 shipmentDate: data.shipment.shipmentDate,
                 shipperId: data.shipment.shipperId,
                 trackingNumber: data.shipment.trackingNumber,
-                shippingPrice: data.shipment.shippingPrice
+                shippingPrice: data.shipment.shippingPrice,
               },
             }
           : undefined,
@@ -81,10 +81,9 @@ export class OrdersService {
         shipment: true,
         bill: true,
         supplier: true,
-        customer: true
+        customer: true,
       },
     });
-
 
     return this.mapOrderToEntity(order);
   }
@@ -140,13 +139,47 @@ export class OrdersService {
         shipment: true,
         bill: true,
         supplier: true,
-        customer: true
+        customer: true,
       },
     });
     return this.mapOrderToEntity(order);
   }
 
-/*   async remove(id: string): Promise<{ order: OrderEntity; message: string }> {
+  async getOrdersBySeller(supplierId: string): Promise<OrderEntity[]> {
+    const orders = await this.prisma.order.findMany({
+      where: { supplierId: supplierId },
+      include: {
+        orderItems: true,
+        shipment: true,
+        bill: true,
+      },
+    });
+    return orders.map((order) => this.mapOrderToEntity(order));
+  }
+
+  async updateOrderBySeller(
+    supplierId: string,
+    orderId: string,
+    data: any,
+  ): Promise<OrderEntity> {
+    const order = await this.prisma.order.updateMany({
+      where: {
+        id: orderId,
+        supplierId: supplierId,
+      },
+      data,
+    });
+
+    if (order.count === 0) {
+      throw new NotFoundException(
+        `Order with ID ${orderId} for seller ${supplierId} not found`,
+      );
+    }
+
+    return this.findOne(orderId);
+  }
+
+  /*   async remove(id: string): Promise<{ order: OrderEntity; message: string }> {
     try {
       const order = await this.prisma.order.delete({
         where: { id }

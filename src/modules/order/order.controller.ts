@@ -1,5 +1,5 @@
 // filepath: /c:/Users/furka/vsProjects/b2b-platform-backend/src/modules/orders/orders.controller.ts
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body } from '@nestjs/common';
 
 import { OrderEntity } from './entities/order.entity';
 import { OrdersService } from './order.service';
@@ -31,6 +31,23 @@ export class OrdersController {
     async update(@Param('id') id: string, @Body() updateOrderDto :UpdateOrderDto): Promise<OrderEntity> {
         return this.ordersService.update(id, updateOrderDto);
     }
+
+  
+
+    @Get('supplier/:supplierId')
+    async getOrdersBySupplier(@Param('supplierId') supplierId: string): Promise<OrderEntity[]> {
+        return this.ordersService.getOrdersBySeller(supplierId);
+    }
+
+    @Put('supplier/:sellerId/order/:orderId')
+    async updateOrderBySeller(
+        @Param('supplierId') supplierId: string,
+        @Param('orderId') orderId: string,
+        @Body() updateOrderDto: UpdateOrderDto
+    ): Promise<OrderEntity> {
+        return this.ordersService.updateOrderBySeller(supplierId, orderId, updateOrderDto);
+    }
+    
 
  /*    @Delete(':id')
     async remove(@Param('id') id: string): Promise<{ order: OrderEntity, message: string }> {
