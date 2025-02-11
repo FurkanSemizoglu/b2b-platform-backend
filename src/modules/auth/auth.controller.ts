@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterSupplierDto } from './dto/register-supplier.dto';
 import { RegisterCustomerDto } from './dto/register-customer.dto';
+import { RegisterAdminDto } from './dto/register-admin.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +31,10 @@ export class AuthController {
   @Post('register/customer')
   async registerCustomer(@Body() registerDto: RegisterCustomerDto) {
     return this.authService.registerCustomer(registerDto);
+  }
+
+  @Post('register/admin')
+  async registerAdmin(@Body() registerDto: RegisterAdminDto) {
+    return this.authService.registerAdmin(registerDto);
   }
 } 
