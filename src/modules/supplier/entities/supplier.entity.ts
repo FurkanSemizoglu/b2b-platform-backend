@@ -8,8 +8,9 @@ export class SupplierEntity implements Supplier {
   logo : string | null;
   products: ProductEntity[]; 
   address :  null; // Şimdilik burası böyle burayaı merih değiştiricek.
+  userId: string;
   createdAt: Date;
   updatedAt: Date;
-  userId: string;
+
 
 }
