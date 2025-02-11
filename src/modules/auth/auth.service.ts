@@ -23,14 +23,62 @@ export class AuthService {
   }
 
   async login(user: any) {
+    // Eski refresh token'ları temizle
+    await this.prisma.refreshToken.deleteMany({
+      where: { userId: user.id }
+    });
+
+    // Yeni refresh token oluştur ve kaydet
+    const refreshToken = this.generateRefreshToken(user);
+    await this.prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 gün
+      }
+    });
+
+    return {
+      access_token: this.generateAccessToken(user),
+      refresh_token: refreshToken
+    };
+  }
+
+  private generateAccessToken(user: any) {
     const payload = { 
       email: user.email, 
       sub: user.id,
       role: user.role 
     };
-    return {
-      access_token: this.jwtService.sign(payload)
+    return this.jwtService.sign(payload, { expiresIn: '15m' });
+  }
+
+  private generateRefreshToken(user: any) {
+    const payload = { 
+      sub: user.id
     };
+    return this.jwtService.sign(payload, { expiresIn: '7d' });
+  }
+
+  async refresh(refreshToken: string) {
+    const tokenRecord = await this.prisma.refreshToken.findUnique({
+      where: { token: refreshToken },
+      include: { user: true }
+    });
+
+    if (!tokenRecord || tokenRecord.expiresAt < new Date()) {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+
+    return {
+      access_token: this.generateAccessToken(tokenRecord.user)
+    };
+  }
+
+  async logout(userId: string) {
+    await this.prisma.refreshToken.deleteMany({
+      where: { userId }
+    });
   }
 
   async register(data: {
