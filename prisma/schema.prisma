@@ -38,21 +38,53 @@ model Product {
   updatedAt           DateTime  @updatedAt
 }
 
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  surname   String
+  email     String   @unique
+  password  String
+  age       Int
+  role      UserRole
+  
+  supplier  Supplier?
+  customer  Customer?
+  admin     Admin?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  SUPPLIER
+  CUSTOMER
+  ADMIN
+}
+
 model Supplier {
-  id             String  @id @default(uuid())
-  companyName    String
-  sellerName     String
-  sellerLastname String
-  website        String?
-  logo           String?
-  email          String
-  password       String
+  id          String    @id @default(uuid())
+  companyName String
+  website     String?
+  logo        String?
+  
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id])
+  
+  products    Product[]
+  address     Address?
 
-  products Product[]
-  address  Address?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
 
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+model Customer {
+  id        String   @id @default(uuid())
+  
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Address {
@@ -85,4 +117,13 @@ model Category {
   products    Product[]
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

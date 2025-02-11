@@ -14,4 +14,5 @@ export class SupplierEntity implements Supplier {
   address :  null; // Şimdilik burası böyle burayaı merih değiştiricek.
   createdAt: Date;
   updatedAt: Date;
+  userId: string;
 }

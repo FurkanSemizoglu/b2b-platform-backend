@@ -7,7 +7,9 @@ import {
     Param,
     Body,
     NotFoundException,
+    UseGuards,
 } from '@nestjs/common';
+import { AdminGuard } from '../../guards/admin.guard';
 
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -34,16 +36,19 @@ export class CategoryController {
     }
 
     @Post()
+    @UseGuards(AdminGuard)
     async create(@Body() createCategoryDto: CreateCategoryDto,): Promise<CategoryEntity> {
         return this.categoryService.create(createCategoryDto);
     }
 
     @Put(':id')
+    @UseGuards(AdminGuard)
     async update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto,): Promise<CategoryEntity> {
         return this.categoryService.update(id, updateCategoryDto);
     }
 
     @Delete(':id')
+    @UseGuards(AdminGuard)
     async remove(@Param('id') id: string): Promise<void> {
         return this.categoryService.remove(id);
     }
