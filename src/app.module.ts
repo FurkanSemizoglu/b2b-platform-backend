@@ -8,6 +8,7 @@ import { CategoryModule } from './modules/category/category.module';
 import { ImageModule } from './modules/image/image.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { AuthModule } from './modules/auth/auth.module';
     CategoryModule,
     ImageModule,
     SupplierModule,
-    AuthModule
+    AuthModule,
+    OrderModule
   ],
   controllers: [AppController],
   providers: [AppService],
