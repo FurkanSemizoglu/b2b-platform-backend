@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductEntity } from './entities/product.entity';
@@ -66,18 +66,24 @@ export class ProductsService {
         return this.mapProductToEntity(product);
     }
 
-    async remove(id: string): Promise<void> {
-        const product = await this.prisma.product.delete({
-            where: { id },
-            include: { // Silinecek ürünü al (isteğe bağlı)
-                images: true,
-                category: true,
-                supplier: true,
-            },
-        });
+    async remove(id: string): Promise<{ product: ProductEntity, message: string }> {
+        try {
+            const product = await this.prisma.product.delete({
+                where: { id },
+                include: {
+                    images: true,
+                    category: true,
+                    supplier: true,
+                },
+            });
 
-        // burada mesaj iletebiliriz ya da silinen veriyi gösterebiliriz belki
-        // Silme işleminden önce veya sonra ek işlemler yapabilirsiniz (isteğe bağlı)
+            return {
+                product: this.mapProductToEntity(product),
+                message: 'Product successfully deleted',
+            };
+        } catch (error) {
+            throw new InternalServerErrorException(`Failed to delete product with ID ${id}`);
+        }
     }
 
     async getProductsByCategory(categoryId: string): Promise<ProductEntity[]> {

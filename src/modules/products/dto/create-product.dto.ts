@@ -3,9 +3,9 @@ export class CreateProductDto {
     productDescription: string;
     totalStockQuantity: number;
     unitPrice: number;
-    siloStockQuantity: number;
-    marketStockQuantity: number;
-    minimumSellingQuantity: number;
+    siloStockQuantity?: number;
+    marketStockQuantity?: number;
+    minimumSellingQuantity?: number;
     discountRate: number;
     categoryId: string;
     supplierId: string;
