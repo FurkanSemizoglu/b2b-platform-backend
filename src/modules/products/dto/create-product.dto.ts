@@ -6,6 +6,7 @@ export class CreateProductDto {
     siloStockQuantity?: number;
     marketStockQuantity?: number;
     minimumSellingQuantity?: number;
+    storeCostPerUnit?: number;
     discountRate: number;
     categoryId: string;
     supplierId: string;

@@ -28,6 +28,7 @@ model Product {
   discountAvailable      Boolean  @default(false)
   discountRate           Int      @default(0)
   images                 Images[]
+  storageCostPerUnit Decimal?
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
