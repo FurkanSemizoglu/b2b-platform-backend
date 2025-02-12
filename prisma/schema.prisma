@@ -236,7 +236,7 @@ model RefreshToken {
 
 
 model ProductInvestment {
-  id                String    @id @default(cuid())
+  id                String    @id @default(uuid())
   productID         String
   product           Product   @relation(fields: [productID], references: [id])
   quantity          Int

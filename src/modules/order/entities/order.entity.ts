@@ -21,6 +21,7 @@ export class OrderEntity implements Order {
     paymentDate: Date | null;
     supplierApproval: boolean | null;
     totalCost: Decimal | null;
+    billId: string | null;
     bill?: BillEntity ;
     createdAt: Date;
     updatedAt: Date;
