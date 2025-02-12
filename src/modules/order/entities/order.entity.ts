@@ -1,5 +1,3 @@
-
-
 import { StatusType, Supplier } from '@prisma/client';
 import { BillEntity } from './bill.entity';
 import { OrderItemEntity } from './order-item.entity';
