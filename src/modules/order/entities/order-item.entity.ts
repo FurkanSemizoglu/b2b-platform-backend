@@ -1,7 +1,8 @@
+import { OrderItem } from '@prisma/client';
 import {  OrderEntity } from './order.entity';
 import { ProductEntity } from 'src/modules/products/entities/product.entity';
-
-export class OrderItemEntity {
+import { Decimal } from '@prisma/client/runtime/library';
+export class OrderItemEntity implements OrderItem {
     id: string;
     orderId: string;
     order: OrderEntity;
@@ -9,7 +10,7 @@ export class OrderItemEntity {
     product: ProductEntity;
     quantity: number;
     discountRate: number;
-    unitPrice: number;
+    unitPrice: Decimal;
     createdAt: Date;
     updatedAt: Date;
 }

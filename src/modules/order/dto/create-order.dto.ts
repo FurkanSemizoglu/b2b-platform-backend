@@ -52,7 +52,6 @@ export class CreateOrderDto {
 
     @IsString()
     supplierId: string;
-
    
 
     @IsArray()
