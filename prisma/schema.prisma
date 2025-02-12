@@ -39,6 +39,7 @@ model Product {
   updatedAt DateTime    @updatedAt
   OrderItem OrderItem[]
   productInvestments  ProductInvestment[]
+  specialDiscountForCustomer SpecialDiscountForCustomer[]
 }
 
 model User {
@@ -82,6 +83,7 @@ model Supplier {
   updatedAt DateTime @updatedAt
   Order     Order[]
   productInvestments  ProductInvestment[]
+  specialDiscountForCustomer SpecialDiscountForCustomer[]
 }
 
 model Customer {
@@ -94,6 +96,7 @@ model Customer {
   updatedAt DateTime @updatedAt
   Order     Order[]
   productInvestments  ProductInvestment[]
+  specialDiscountForCustomer SpecialDiscountForCustomer[]
 }
 
 model Address {
@@ -250,4 +253,19 @@ model ProductInvestment {
   active            Boolean   @default(true)
   createdTime       DateTime  @default(now())
   endingTime        DateTime? // Yatırımın bitiş zamanı (nullable)
+}
+
+
+model SpecialDiscountForCustomer {
+  id                String    @id @default(uuid())
+  productID         String    
+  product           Product   @relation(fields: [productID], references: [id])
+  customerID        String
+  customer          Customer  @relation(fields: [customerID], references: [id])
+  supplierID        String
+  supplier          Supplier  @relation(fields: [supplierID], references: [id])
+  discountRate      Int
+  active            Boolean   @default(true)
+  createdTime       DateTime  @default(now())
+  updatedTime       DateTime  @updatedAt
 }
