@@ -1,53 +1,46 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateShipmentDto } from './dto/create-shipment.dto';
-import { StatusType } from '@prisma/client';
+import { ShipmentEntity } from './entities/shipment.entity';
 
 @Injectable()
 export class ShipmentService {
   constructor(private prisma: PrismaService) {}
 
-  create(createShipmentDto: CreateShipmentDto) {
+  async create(createShipmentDto: CreateShipmentDto) {
     return this.prisma.shipment.create({
-      data: createShipmentDto,
-      include: {
-        order: true,
-        shipper: true
-      }
+      data: {
+        ...createShipmentDto,
+      },
     });
   }
 
-  findAll() {
+  async findAll() {
     return this.prisma.shipment.findMany({
       include: {
         order: true,
-        shipper: true
-      }
+      },
     });
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return this.prisma.shipment.findUnique({
       where: { id },
       include: {
         order: true,
-        shipper: true
-      }
+      },
     });
   }
 
-  update(id: string, updateData: any) {
+  async update(id: string, updateData: any) {
     return this.prisma.shipment.update({
       where: { id },
       data: updateData,
       include: {
         order: true,
-        shipper: true
-      }
+      },
     });
   }
-
-
 
   async findShipmentItems(id: string) {
     return this.prisma.shipment.findUnique({
@@ -57,13 +50,12 @@ export class ShipmentService {
           include: {
             orderItems: {
               include: {
-                product: true
-              }
-            }
-          }
-        }
-      }
+                product: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
-
 } 

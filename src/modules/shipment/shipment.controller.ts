@@ -34,8 +34,6 @@ export class ShipmentController {
     return this.shipmentService.update(id, updateData);
   }
 
-
-
   @Get(':id/items') 
   findShipmentItems(@Param('id') id: string) {
     return this.shipmentService.findShipmentItems(id);

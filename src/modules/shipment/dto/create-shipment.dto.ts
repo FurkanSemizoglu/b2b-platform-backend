@@ -1,15 +1,14 @@
-import { IsString, IsOptional, IsDate, IsDecimal } from 'class-validator';
+import { IsString, IsOptional, IsDecimal, IsDate } from 'class-validator';
 
 export class CreateShipmentDto {
   @IsString()
   orderId: string;
 
   @IsString()
-  shipperId: string;
+  companyName: string;
 
-  @IsOptional()
-  @IsDate()
-  shipmentDate?: Date;
+  @IsString()
+  shipmentType: string;
 
   @IsOptional()
   @IsString()
@@ -18,4 +17,8 @@ export class CreateShipmentDto {
   @IsOptional()
   @IsDecimal()
   shippingPrice?: number;
+
+  @IsOptional()
+  @IsDate()
+  shipmentDate?: Date;
 } 

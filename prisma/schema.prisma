@@ -188,30 +188,18 @@ model OrderItem {
   updatedAt    DateTime @updatedAt
 }
 
-model Shipment { // tahmini teslimat zamanı eklenebilir
+model Shipment {
   id             String    @id @default(uuid())
   orderId        String    @unique
   order          Order     @relation(fields: [orderId], references: [id])
   shipmentDate   DateTime?
-  shipperId      String
-  shipper        Shipper   @relation(fields: [shipperId], references: [id])
+  companyName    String    // Kargo firması adı
+  shipmentType   String    // Kargo türü (örn: LAND, AIR, SEA)
   trackingNumber String?
   shippingPrice  Decimal?
   status         StatusType @default(PENDING)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-}
-
-model Shipper {
-  id           String     @id @default(uuid())
-  componyName  String // Kargo firması adı
-  phone        String? // Telefon numarası (nullable)
-  email        String? // E-posta adresi (nullable)
-  website      String? // Web sitesi (nullable)
-  shipments    Shipment[]
-  ShipmentType String // Burası enum olabilir gemi-kara-hava ilerde düşünülücek.
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
 }
 
 model Bill {
