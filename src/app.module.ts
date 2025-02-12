@@ -10,7 +10,7 @@ import { SupplierModule } from './modules/supplier/supplier.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { OrderModule } from './modules/order/order.module';
 import { ProductInvestmentModule } from './modules/product-investment/product-investment.module';
-
+import { SpecialDiscountModule } from './modules/special-discount-for-customer/special-discount.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,7 +23,8 @@ import { ProductInvestmentModule } from './modules/product-investment/product-in
     SupplierModule,
     AuthModule,
     OrderModule,
-    ProductInvestmentModule
+    ProductInvestmentModule,
+    SpecialDiscountModule
   ],
   controllers: [AppController],
   providers: [AppService],
