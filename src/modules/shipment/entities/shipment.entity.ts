@@ -1,6 +1,5 @@
 import { Shipment, StatusType } from '@prisma/client';
 import { OrderEntity } from '../../order/entities/order.entity';
-import { ShipperEntity } from './shipper.entity';
 import { Decimal } from '@prisma/client/runtime/library';
 
 export class ShipmentEntity implements Shipment {
@@ -8,8 +7,8 @@ export class ShipmentEntity implements Shipment {
   orderId: string;
   order?: OrderEntity;
   shipmentDate: Date | null;
-  shipperId: string;
-  shipper?: ShipperEntity;
+  companyName: string;
+  shipmentType: string;
   trackingNumber: string | null;
   shippingPrice: Decimal | null;
   status: StatusType;

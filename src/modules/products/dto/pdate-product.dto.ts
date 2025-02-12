@@ -8,6 +8,7 @@ export class UpdateProductDto {
     minimumSellingQuantity?: number;
     discountRate?: number;
     storeCostPerUnit?: number;
+    commissionRate?: number;
     categoryId?: string;
     supplierId?: string;
 }

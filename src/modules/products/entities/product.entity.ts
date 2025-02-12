@@ -18,6 +18,7 @@ export class ProductEntity implements Product {
   minimumSellingQuantity: number | null;
   discountAvailable: boolean;
   discountRate: number;
+  commissionRate: number | null;
   images: ImageEntity[] | null; 
   storageCostPerUnit : Prisma.Decimal | null;
   categoryId: string;
