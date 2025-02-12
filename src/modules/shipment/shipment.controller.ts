@@ -34,7 +34,7 @@ export class ShipmentController {
     return this.shipmentService.update(id, updateData);
   }
 
-  @Get(':id/items') 
+  @Get(':id/items') // items listesi döndürür direkt
   findShipmentItems(@Param('id') id: string) {
     return this.shipmentService.findShipmentItems(id);
   }
