@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { SpecialDiscountService } from './special-discount.service';
 import { CreateSpecialDiscountDto } from './dto/create-special-discount.dto';
 import { UpdateSpecialDiscountDto } from './dto/update-special-discount.dto';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
+import { AdminGuard } from '../../guards/admin.guard';
 
 @Controller('special-discount')
 export class SpecialDiscountController {
@@ -12,11 +14,13 @@ export class SpecialDiscountController {
     return this.specialDiscountService.create(createSpecialDiscountDto);
   }
 
+  //@UseGuards(JwtAuthGuard,AdminGuard)
   @Get()
   findAll() {
     return this.specialDiscountService.findAll();
   }
 
+  //@UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.specialDiscountService.findOne(id);

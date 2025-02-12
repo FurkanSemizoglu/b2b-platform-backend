@@ -9,6 +9,7 @@ import {
   NotFoundException,
   UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
 import { AdminGuard } from '../../guards/admin.guard';
 
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -34,6 +35,7 @@ export class CategoryController {
     return category;
   }
 
+  //@UseGuards(JwtAuthGuard,AdminGuard)
   @Post()
   async create(
     @Body() createCategoryDto: CreateCategoryDto,
@@ -41,6 +43,7 @@ export class CategoryController {
     return this.categoryService.create(createCategoryDto);
   }
 
+  //@UseGuards(JwtAuthGuard,AdminGuard)
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -49,6 +52,7 @@ export class CategoryController {
     return this.categoryService.update(id, updateCategoryDto);
   }
 
+  //@UseGuards(JwtAuthGuard,AdminGuard)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<{ message: string }> {
     const message = await this.categoryService.remove(id);

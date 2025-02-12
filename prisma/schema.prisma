@@ -27,8 +27,9 @@ model Product {
   minimumSellingQuantity Int?
   discountAvailable      Boolean  @default(false)
   discountRate           Int      @default(0)
+  commissionRate         Float?   // Yüzdelik komisyon oranı (opsiyonel)
   images                 Images[]
-  storageCostPerUnit Decimal?
+  storageCostPerUnit     Decimal?
 
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])

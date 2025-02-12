@@ -15,10 +15,8 @@ export class CreateShipmentDto {
   trackingNumber?: string;
 
   @IsOptional()
-  @IsDecimal()
   shippingPrice?: number;
 
   @IsOptional()
-  @IsDate()
   shipmentDate?: Date;
 } 

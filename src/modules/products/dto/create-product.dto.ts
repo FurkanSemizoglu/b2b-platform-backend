@@ -8,6 +8,7 @@ export class CreateProductDto {
     minimumSellingQuantity?: number;
     storeCostPerUnit?: number;
     discountRate: number;
+    commissionRate: number;
     categoryId: string;
     supplierId: string;
 } 

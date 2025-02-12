@@ -11,6 +11,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { OrderModule } from './modules/order/order.module';
 import { ProductInvestmentModule } from './modules/product-investment/product-investment.module';
 import { SpecialDiscountModule } from './modules/special-discount-for-customer/special-discount.module';
+import { ShipmentModule } from './modules/shipment/shipment.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,6 +23,7 @@ import { SpecialDiscountModule } from './modules/special-discount-for-customer/s
     CategoryModule,
     ImageModule,
     SupplierModule,
+    ShipmentModule,
     AuthModule,
     OrderModule,
     ProductInvestmentModule,
