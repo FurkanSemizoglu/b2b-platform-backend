@@ -42,40 +42,44 @@ export class OrdersService {
   }
 
   async create(data: CreateOrderDto) {
-    const order = this.prisma.order.create({
-      data: {
-        orderNumber: data.orderNumber,
-        customerId: data.customerId,
-        supplierId: data.supplierId,
-        orderItems: {
-          create: data.orderItems.map((item) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            discountRate: item.discountRate,
-            unitPrice: item.unitPrice,
-          })),
-        },
-        shipment: data.shipment
-          ? {
-              create: {
-                shipmentDate: data.shipment.shipmentDate,
-                shipperId: data.shipment.shipperId,
-                trackingNumber: data.shipment.trackingNumber,
-                shippingPrice: data.shipment.shippingPrice,
-              },
-            }
-          : undefined,
-        paymentDate: data.paymentDate,
-        supplierApproval: data.supplierApproval,
-        totalCost: data.totalCost,
-        bill: data.bill
-          ? {
-              create: {
-                billDate: data.bill.billDate,
-              },
-            }
-          : undefined,
+    const orderData: any = {
+      orderNumber: data.orderNumber,
+      customerId: data.customerId,
+      supplierId: data.supplierId,
+      orderItems: {
+        create: data.orderItems.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          discountRate: item.discountRate,
+          unitPrice: item.unitPrice,
+        })),
       },
+      paymentDate: data.paymentDate,
+      supplierApproval: data.supplierApproval,
+      totalCost: data.totalCost,
+    };
+
+    if (data.shipment) {
+      orderData.shipment = {
+        create: {
+          shipmentDate: data.shipment.shipmentDate,
+          shipperId: data.shipment.shipperId,
+          trackingNumber: data.shipment.trackingNumber,
+          shippingPrice: data.shipment.shippingPrice,
+        },
+      };
+    }
+
+    if (data.bill) {
+      orderData.bill = {
+        create: {
+          billDate: data.bill.billDate,
+        },
+      };
+    }
+
+    const order = await this.prisma.order.create({
+      data: orderData,
       include: {
         orderItems: true,
         shipment: true,

@@ -9,6 +9,7 @@ import { ImageModule } from './modules/image/image.module';
 import { SupplierModule } from './modules/supplier/supplier.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { OrderModule } from './modules/order/order.module';
+import { ProductInvestmentModule } from './modules/product-investment/product-investment.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { OrderModule } from './modules/order/order.module';
     ImageModule,
     SupplierModule,
     AuthModule,
-    OrderModule
+    OrderModule,
+    ProductInvestmentModule
   ],
   controllers: [AppController],
   providers: [AppService],
