@@ -180,7 +180,7 @@ model OrderItem {
   updatedAt    DateTime @updatedAt
 }
 
-model Shipment {
+model Shipment { // tahmini teslimat zamanı eklenebilir
   id             String    @id @default(uuid())
   orderId        String    @unique
   order          Order     @relation(fields: [orderId], references: [id])
