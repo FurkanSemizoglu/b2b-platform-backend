@@ -1,10 +1,8 @@
-
-
 import { StatusType, Supplier } from '@prisma/client';
 import { BillEntity } from './bill.entity';
 import { OrderItemEntity } from './order-item.entity';
 import { ShipmentEntity } from './shipment.entity';
-import { CustomerEntity } from 'src/modules/auth/entities/customer.entity';
+import { CustomerEntity } from '../../customer/entities/customer.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 
 
