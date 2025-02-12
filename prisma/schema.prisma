@@ -38,6 +38,7 @@ model Product {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   OrderItem OrderItem[]
+  productInvestments  ProductInvestment[]
 }
 
 model User {
@@ -80,6 +81,7 @@ model Supplier {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Order     Order[]
+  productInvestments  ProductInvestment[]
 }
 
 model Customer {
@@ -91,6 +93,7 @@ model Customer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Order     Order[]
+  productInvestments  ProductInvestment[]
 }
 
 model Address {
@@ -147,7 +150,8 @@ model Order {
   paymentDate      DateTime? // Ödeme tarihi (nullable)
   supplierApproval Boolean? // Tedarikçi onay durumu (nullable)
   totalCost        Decimal? // Toplam maliyet (nullable)
-  bill             Bill? // Fatura bilgisi (nullable)
+  billId           String? // Fatura bilgisi (nullable)
+  bill             Bill?   @relation(fields: [billId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -209,11 +213,13 @@ model Shipper {
 
 model Bill {
   id        String    @id @default(uuid())
-  orderId   String    @unique
-  order     Order     @relation(fields: [orderId], references: [id])
+/*   orderId   String    @unique
+  order     Order     @relation(fields: [orderId], references: [id]) */
   billDate  DateTime? // Fatura tarihi (nullable)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  order     Order[]
+  productInvestment ProductInvestment[]
   // ... diğer fatura bilgileri (fatura numarası, tutarı vb.)
 }
 
@@ -225,4 +231,23 @@ model RefreshToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+
+model ProductInvestment {
+  id                String    @id @default(cuid())
+  productID         String
+  product           Product   @relation(fields: [productID], references: [id])
+  quantity          Int
+  unitPrice         Decimal
+  customerID        String
+  customer          Customer  @relation(fields: [customerID], references: [id])
+  supplierID        String
+  supplier          Supplier  @relation(fields: [supplierID], references: [id])
+  billID            String
+  bill              Bill?     @relation(fields: [billID], references: [id])    
+  active            Boolean   @default(true)
+  createdTime       DateTime  @default(now())
+  endingTime        DateTime? // Yatırımın bitiş zamanı (nullable)
 }
