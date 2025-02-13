@@ -1,0 +1,26 @@
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Package dosyalarını kopyalıyoruz
+COPY package*.json ./
+
+# Önce NestJS CLI'ı global olarak yüklüyoruz
+RUN npm install -g @nestjs/cli
+
+# Tüm bağımlılıkları yüklüyoruz (development bağımlılıkları build için gerekli)
+RUN npm install
+
+# Proje dosyalarını kopyalıyoruz
+COPY . .
+
+# Uygulamayı derliyoruz
+RUN npm run build
+
+# Production bağımlılıklarını tekrar yüklüyoruz (daha küçük image için)
+RUN npm ci --only=production
+
+# Uygulamayı çalıştırıyoruz
+CMD ["npm", "run", "start:prod"]
+
+EXPOSE 3000
