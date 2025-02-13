@@ -45,6 +45,12 @@ export class OrdersController {
     }
 
     //@UseGuards(JwtAuthGuard)
+    @Get('customer/:customerId')
+    async getOrdersByCustomer(@Param('customerId') customerId: string): Promise<OrderEntity[]> {
+        return this.ordersService.getOrdersByCustomer(customerId);
+    }
+
+    //@UseGuards(JwtAuthGuard)
     @Put('supplier/:sellerId/order/:orderId')
     async updateOrderBySeller(
         @Param('supplierId') supplierId: string,

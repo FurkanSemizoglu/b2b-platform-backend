@@ -53,6 +53,7 @@ export class ProductsService {
 
 
     async update(id: string, updateProductDto: UpdateProductDto): Promise<ProductEntity> {
+
         const product = await this.prisma.product.update({
             where: { id },
             data: updateProductDto,
