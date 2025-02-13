@@ -153,8 +153,9 @@ model Order {
   paymentDate      DateTime? // Ödeme tarihi (nullable)
   supplierApproval Boolean? // Tedarikçi onay durumu (nullable)
   totalCost        Decimal? // Toplam maliyet (nullable)
-  billId           String? // Fatura bilgisi (nullable)
-  bill             Bill?   @relation(fields: [billId], references: [id])
+
+  billId           String?     @unique // Siparişin 1 faturası olacak
+  bill             Bill?       @relation(fields: [billId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -209,8 +210,8 @@ model Bill {
   billDate  DateTime? // Fatura tarihi (nullable)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  order     Order[]
-  productInvestment ProductInvestment[]
+  order             Order?     
+  productInvestment ProductInvestment?  // Burası şimdilik böyle ama ileride yatırım için ayrı fatura tablosu oluşturulabilir.
   // ... diğer fatura bilgileri (fatura numarası, tutarı vb.)
 }
 
@@ -236,8 +237,9 @@ model ProductInvestment {
   customer          Customer  @relation(fields: [customerID], references: [id])
   supplierID        String
   supplier          Supplier  @relation(fields: [supplierID], references: [id])
-  billID            String
-  bill              Bill?     @relation(fields: [billID], references: [id])    
+
+  billId           String?     @unique // Ürün yatırımının 1 faturası olacak
+  bill             Bill?       @relation(fields: [billId], references: [id]) 
   active            Boolean   @default(true)
   createdTime       DateTime  @default(now())
   endingTime        DateTime? // Yatırımın bitiş zamanı (nullable)

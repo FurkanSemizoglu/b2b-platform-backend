@@ -48,7 +48,7 @@ export class CategoryService {
     }
   }
 
-  private mapCategoryToEntity(category: any): CategoryEntity {
+  public mapCategoryToEntity(category: any): CategoryEntity {
     const categoryEntity = new CategoryEntity();
     Object.assign(categoryEntity, category);
     return categoryEntity;
