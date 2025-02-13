@@ -1,4 +1,4 @@
-import { Order, StatusType, Supplier } from '@prisma/client';
+import { Order, StatusType } from '@prisma/client';
 import { BillEntity } from './bill.entity';
 import { OrderItemEntity } from './order-item.entity';
 
