@@ -161,6 +161,18 @@ export class OrdersService {
     return orders.map((order) => this.mapOrderToEntity(order));
   }
 
+  async getOrdersByCustomer(customerId: string): Promise<OrderEntity[]> {
+    const orders = await this.prisma.order.findMany({
+      where: { customerId: customerId },
+      include: {
+        orderItems: true,
+        shipment: true,
+        bill: true,
+      },
+    });
+    return orders.map((order) => this.mapOrderToEntity(order));
+  }
+  
   async updateOrderBySeller(
     supplierId: string,
     orderId: string,

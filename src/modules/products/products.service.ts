@@ -24,7 +24,7 @@ export class ProductsService {
         return products.map((product) => this.mapProductToEntity(product));
     }
 
-
+// aynı producttan 2 tane eklenenilir mi ?
     async create(createProductDto: CreateProductDto): Promise<ProductEntity> {
         const product = await this.prisma.product.create({
             data: createProductDto,
@@ -53,6 +53,7 @@ export class ProductsService {
 
 
     async update(id: string, updateProductDto: UpdateProductDto): Promise<ProductEntity> {
+
         const product = await this.prisma.product.update({
             where: { id },
             data: updateProductDto,
