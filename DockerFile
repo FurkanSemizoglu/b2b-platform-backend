@@ -1,0 +1,26 @@
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Package dosyalarını kopyalıyoruz
+COPY package*.json ./
+
+# Development bağımlılıkları da dahil tüm bağımlılıkları yüklüyoruz
+RUN npm install
+
+# Prisma'yı yükle
+RUN npm install @prisma/client
+
+# Proje dosyalarını kopyalıyoruz
+COPY . .
+
+# TypeScript ve NestJS CLI'ı global olarak yüklüyoruz
+RUN npm install -g @nestjs/cli typescript
+
+# Prisma generate'i önce çalıştır
+RUN npx prisma generate
+
+# Prisma migrasyonlarını development modunda çalıştırmak yerine deploy kullan
+CMD /bin/sh -c "npx prisma migrate deploy && npm run start"
+
+EXPOSE 3000
